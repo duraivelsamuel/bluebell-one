@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="theme-color" content="#0D47A1">
+<title>Bluebell One</title>
+<style>
+:root{
+  --b1:#0D47A1;--b2:#1565C0;--b3:#1E88E5;--b4:#E3F2FD;--b5:#F0F7FF;
+  --gr:#1B7F3A;--gr-lt:#EAF7EE;
+  --re:#C0392B;--re-lt:#FEECEB;
+  --am:#92400E;--am-lt:#FEF3C7;
+  --t1:#0F172A;--t2:#475569;--t3:#94A3B8;
+  --bd:#E2E8F0;--surf:#FFFFFF;
+  --r:12px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--b5);color:var(--t1);min-height:100vh}
+
+/* ─── LOGIN ─────────────────────────────────── */
+#screen-login{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(160deg,#0D47A1 0%,#1565C0 55%,#29B6F6 100%);
+  padding:20px;
+}
+.login-card{background:#fff;border-radius:20px;padding:36px 28px;width:100%;max-width:360px;
+  box-shadow:0 24px 64px rgba(0,0,0,0.22)}
+.login-brand{display:flex;align-items:center;gap:12px;margin-bottom:28px;justify-content:center}
+.login-brand img{width:52px;height:52px;border-radius:14px;object-fit:cover}
+.brand-text .name{font-size:22px;font-weight:800;color:var(--b1);letter-spacing:-0.5px}
+.brand-text .sub{font-size:11px;color:var(--t3);font-weight:600;letter-spacing:1px;margin-top:1px}
+.f-group{margin-bottom:14px}
+.f-group label{display:block;font-size:11px;font-weight:700;color:var(--t2);margin-bottom:5px;letter-spacing:0.3px}
+.f-group input{width:100%;padding:11px 13px;border:1.5px solid var(--bd);border-radius:9px;
+  font-size:14px;font-family:var(--font);outline:none;transition:border-color .15s}
+.f-group input:focus{border-color:var(--b2)}
+.btn-login{width:100%;padding:13px;background:linear-gradient(135deg,var(--b1),var(--b3));
+  color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;
+  cursor:pointer;font-family:var(--font);margin-top:6px;letter-spacing:0.2px}
+.login-err{font-size:12px;color:var(--re);text-align:center;margin-top:10px;min-height:16px}
+
+/* ─── APP SHELL ─────────────────────────────── */
+#screen-app{min-height:100vh;display:flex;flex-direction:column}
+.topbar{
+  background:linear-gradient(135deg,var(--b1),var(--b2));color:#fff;
+  padding:0 16px;height:54px;display:flex;align-items:center;gap:10px;
+  position:sticky;top:0;z-index:100;
+}
+.topbar img{width:30px;height:30px;border-radius:8px;object-fit:cover;flex-shrink:0}
+.topbar-name{font-size:16px;font-weight:800;flex:1;letter-spacing:-0.3px}
+.topbar-user{font-size:11px;opacity:0.85;text-align:right;line-height:1.4}
+.topbar-user b{display:block;font-size:13px}
+.btn-out{background:rgba(255,255,255,0.15);border:none;color:#fff;border-radius:6px;
+  padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font);margin-left:6px}
+.breadcrumb{
+  background:#fff;border-bottom:1px solid var(--bd);
+  padding:0 16px;height:40px;display:flex;align-items:center;gap:4px;
+  font-size:12px;overflow-x:auto;white-space:nowrap;
+}
+.bc-link{color:var(--b2);font-weight:600;cursor:pointer;flex-shrink:0}
+.bc-link:hover{text-decoration:underline}
+.bc-cur{color:var(--t2);font-weight:600;flex-shrink:0}
+.bc-sep{color:var(--t3);margin:0 1px}
+#content{flex:1;padding:16px;max-width:880px;margin:0 auto;width:100%}
+
+/* ─── HOME ──────────────────────────────────── */
+.sec-lbl{font-size:12px;font-weight:700;color:var(--t3);letter-spacing:0.5px;margin-bottom:10px}
+
+/* ─── SLIDER ─────────────────────────────────── */
+.slider-wrap{position:relative;width:100%;border-radius:16px;overflow:hidden;
+  margin-bottom:20px;background:#dde8f7;aspect-ratio:2.5/1;min-height:120px;max-height:200px}
+.slider-track{display:flex;height:100%;transition:transform .45s cubic-bezier(.4,0,.2,1)}
+.slide{flex:0 0 100%;height:100%;position:relative}
+.slide img{width:100%;height:100%;object-fit:cover;display:block}
+.slide-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--b1),var(--b3));color:#fff;font-size:28px}
+.slider-dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
+  display:flex;gap:6px;z-index:2}
+.slider-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.5);
+  cursor:pointer;transition:background .2s,transform .2s;border:none;padding:0}
+.slider-dot.on{background:#fff;transform:scale(1.25)}
+.slider-prev,.slider-next{position:absolute;top:50%;transform:translateY(-50%);
+  background:rgba(0,0,0,0.28);border:none;color:#fff;width:30px;height:30px;
+  border-radius:50%;font-size:14px;cursor:pointer;z-index:2;display:flex;
+  align-items:center;justify-content:center;transition:background .15s}
+.slider-prev{left:8px}.slider-next{right:8px}
+.slider-prev:hover,.slider-next:hover{background:rgba(0,0,0,0.5)}
+
+.col-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.col-card{
+  background:#fff;border-radius:14px;overflow:hidden;cursor:pointer;
+  border:2px solid transparent;transition:all .15s;
+  box-shadow:0 1px 4px rgba(0,0,0,0.05);
+}
+.col-card:hover{border-color:var(--b2);transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(21,101,192,0.12)}
+.col-thumb{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--b4)}
+.col-thumb-fb{width:100%;aspect-ratio:4/3;background:var(--b4);
+  display:flex;align-items:center;justify-content:center;font-size:30px}
+.col-info{padding:12px 14px}
+.col-icon{width:36px;height:36px;border-radius:10px;background:var(--b4);
+  display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:8px}
+.col-name{font-size:13px;font-weight:700;color:var(--t1);line-height:1.35}
+
+/* ─── COURSE GRID ───────────────────────────── */
+.crs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.crs-card{
+  background:#fff;border-radius:12px;padding:18px 12px;cursor:pointer;text-align:center;
+  border:2px solid transparent;transition:all .15s;box-shadow:0 1px 4px rgba(0,0,0,0.05);
+}
+.crs-card:hover{border-color:var(--b2);background:var(--b4)}
+.crs-icon{font-size:26px;margin-bottom:8px}
+.crs-name{font-size:14px;font-weight:800;color:var(--b1)}
+
+/* ─── FILTER TABS ───────────────────────────── */
+.tabs{display:flex;gap:8px;margin-bottom:12px}
+.tab{padding:6px 16px;border-radius:20px;border:1.5px solid var(--bd);
+  background:#fff;font-size:12px;font-weight:700;color:var(--t2);
+  cursor:pointer;transition:all .15s;font-family:var(--font)}
+.tab.on{background:var(--b2);border-color:var(--b2);color:#fff}
+
+/* ─── SEARCH ────────────────────────────────── */
+.search-wrap{position:relative;margin-bottom:10px}
+.search-wrap input{width:100%;padding:9px 12px 9px 36px;border:1.5px solid var(--bd);
+  border-radius:9px;font-size:13px;font-family:var(--font);outline:none;background:#fff;
+  transition:border-color .15s}
+.search-wrap input:focus{border-color:var(--b2)}
+.search-wrap .si{position:absolute;left:10px;top:50%;transform:translateY(-50%);
+  font-size:14px;pointer-events:none;opacity:0.45}
+
+/* ─── STUDENT LIST ──────────────────────────── */
+.stu-list{display:flex;flex-direction:column;gap:8px}
+.stu-card{
+  background:#fff;border-radius:11px;padding:13px 15px;
+  display:flex;align-items:center;gap:12px;
+  border:1.5px solid var(--bd);transition:all .15s;
+}
+.stu-card-body{display:flex;align-items:center;gap:12px;flex:1;min-width:0;cursor:pointer}
+.stu-card:hover{border-color:var(--b2);box-shadow:0 2px 10px rgba(21,101,192,0.1)}
+.avatar{width:40px;height:40px;border-radius:50%;background:var(--b4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:800;color:var(--b2);flex-shrink:0}
+.stu-info{flex:1;min-width:0}
+.stu-name{font-size:14px;font-weight:700}
+.stu-sub{font-size:12px;color:var(--t3);margin-top:2px}
+.badge{display:inline-flex;align-items:center;font-size:11px;font-weight:700;
+  padding:3px 9px;border-radius:20px;flex-shrink:0}
+.b-paid{background:var(--gr-lt);color:var(--gr)}
+.b-part{background:var(--am-lt);color:var(--am)}
+.b-unpd{background:var(--re-lt);color:var(--re)}
+.b-none{background:#F1F5F9;color:var(--t3)}
+.btn-del-stu{background:none;border:none;cursor:pointer;padding:6px;color:var(--t3);
+  font-size:16px;flex-shrink:0;border-radius:6px;transition:color .15s,background .15s}
+.btn-del-stu:hover{color:var(--re);background:var(--re-lt)}
+
+/* ─── FAB ───────────────────────────────────── */
+#fab{position:fixed;bottom:22px;right:18px;width:50px;height:50px;border-radius:50%;
+  background:var(--b2);color:#fff;border:none;font-size:22px;cursor:pointer;
+  box-shadow:0 4px 18px rgba(21,101,192,0.35);display:none;align-items:center;
+  justify-content:center;z-index:50;font-family:var(--font)}
+
+/* ─── DETAIL ────────────────────────────────── */
+.det-hdr{background:linear-gradient(135deg,var(--b1),var(--b2));color:#fff;
+  border-radius:14px;padding:20px;margin-bottom:14px}
+.det-name{font-size:20px;font-weight:800;margin-bottom:3px}
+.det-sub{font-size:13px;opacity:0.85}
+
+.bal-row{display:flex;gap:1px;background:var(--bd);border-radius:12px;
+  overflow:hidden;margin-bottom:14px;border:1px solid var(--bd)}
+.bal-cell{flex:1;background:#fff;padding:13px 8px;text-align:center}
+.bal-val{font-size:17px;font-weight:800;color:var(--b1)}
+.bal-val.g{color:var(--gr)}.bal-val.r{color:var(--re)}.bal-val.s{font-size:13px}
+.bal-lbl{font-size:9px;color:var(--t3);font-weight:700;text-transform:uppercase;margin-top:2px;letter-spacing:0.3px}
+
+.card{background:#fff;border-radius:14px;border:1px solid var(--bd);margin-bottom:14px;overflow:hidden}
+.card-hd{padding:13px 15px;border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:space-between;gap:8px}
+.card-title{font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px}
+.card-body{padding:15px}
+
+.fee-tbl{width:100%;border-collapse:collapse}
+.fee-tbl td{padding:9px 4px;font-size:13px;border-bottom:1px solid var(--bd);vertical-align:top}
+.fee-tbl tr:last-child td{border-bottom:none;font-weight:800;font-size:14px}
+.fee-tbl td:last-child{text-align:right;font-weight:600}
+.fee-lbl{color:var(--t2)}
+
+.pmt-tbl{width:100%;border-collapse:collapse}
+.pmt-tbl th{font-size:10px;font-weight:700;color:var(--t3);padding:8px 10px;
+  border-bottom:2px solid var(--bd);text-align:left;white-space:nowrap;background:#fff}
+.pmt-tbl td{font-size:12px;padding:10px;border-bottom:1px solid var(--bd);vertical-align:middle}
+.pmt-tbl tr:last-child td{border-bottom:none}
+.tbl-wrap{overflow-x:auto}
+
+.pmt-foot{background:var(--gr-lt);color:var(--gr);padding:11px 15px;font-size:13px;font-weight:700}
+
+/* ─── MODAL ─────────────────────────────────── */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;
+  display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-bg.open{opacity:1;pointer-events:all}
+.modal{background:#fff;border-radius:20px 20px 0 0;padding:22px 18px;
+  width:100%;max-width:500px;max-height:88vh;overflow-y:auto;
+  transform:translateY(30px);transition:transform .2s}
+.modal-bg.open .modal{transform:translateY(0)}
+.modal-title{font-size:16px;font-weight:800;margin-bottom:14px;color:var(--t1)}
+.modal-note{font-size:11px;color:var(--t3);margin-bottom:12px;line-height:1.5}
+
+/* ─── FORM ──────────────────────────────────── */
+.f-lbl{font-size:11px;font-weight:700;color:var(--t2);margin-bottom:4px;letter-spacing:0.3px}
+.f-inp{width:100%;padding:10px 12px;border:1.5px solid var(--bd);border-radius:9px;
+  font-size:13px;font-family:var(--font);outline:none;transition:border-color .15s}
+.f-inp:focus{border-color:var(--b2)}
+.f-row{display:flex;gap:10px;margin-bottom:12px}
+.f-row>div{flex:1;min-width:0}
+.f-mb{margin-bottom:12px}
+
+/* ─── BUTTONS ───────────────────────────────── */
+.btn{padding:9px 16px;border-radius:9px;border:none;font-size:13px;
+  font-weight:700;cursor:pointer;font-family:var(--font);transition:all .15s}
+.btn-p{background:var(--b2);color:#fff}.btn-p:hover{background:var(--b1)}
+.btn-s{background:var(--b4);color:var(--b2)}
+.btn-d{background:var(--re-lt);color:var(--re)}
+.btn-sm{padding:4px 10px;font-size:11px}
+.btn-row{display:flex;gap:8px;margin-top:14px}
+
+/* ─── EMPTY ─────────────────────────────────── */
+.empty{text-align:center;padding:36px 20px;color:var(--t3)}
+.empty .ico{font-size:34px;margin-bottom:10px}
+.empty p{font-size:14px;font-weight:600}
+.empty small{font-size:12px;display:block;margin-top:4px}
+
+/* ─── TOAST ─────────────────────────────────── */
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(70px);
+  background:#1E293B;color:#fff;padding:11px 20px;border-radius:10px;
+  font-size:13px;font-weight:600;transition:transform .25s;z-index:999;
+  white-space:nowrap;pointer-events:none}
+#toast.show{transform:translateX(-50%) translateY(0)}
+#toast.err{background:var(--re)}
+
+/* ─── VERSION LABEL ─────────────────────────── */
+.app-ver{font-size:11px;font-weight:600;color:#94A3B8;text-align:center;padding:18px 0 90px}
+#ver-login{padding:14px 0 0}
+
+/* ─── SUMMARY REPORT ────────────────────────── */
+.rpt-wrap{display:flex;flex-direction:column;gap:14px}
+.rpt-college{font-size:16px;font-weight:800;color:#000;padding:0 2px}
+.rpt-col{background:#fff;border-radius:12px;overflow:hidden;border:1px solid #CBD5E1}
+.rpt-tbl{width:100%;border-collapse:collapse;font-size:12px;font-weight:700;color:#000}
+.rpt-tbl td{border:1px solid #CBD5E1;padding:7px 5px;vertical-align:top;line-height:1.4}
+.rpt-tbl tr:first-child td{border-top:0}
+.rpt-tbl tr:last-child td{border-bottom:0}
+.rpt-tbl td:first-child{border-left:0;width:30%;padding-left:10px}
+.rpt-tbl td:not(:first-child){width:23%;text-align:right;white-space:nowrap} 
+.rpt-tbl td:last-child{border-right:0;padding-right:10px}
+.rpt-course td{font-size:14px;font-weight:800;padding:10px 8px;text-align:left !important}
+.rpt-head td{background:#E8EEF7;font-weight:800}
+.rpt-sub{display:block;font-size:11px}
+
+/* ─── YEAR / BATCH GRID ─────────────────────── */
+.yr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.yr-card{background:#fff;border-radius:12px;padding:16px 14px;cursor:pointer;
+  border:2px solid transparent;transition:all .15s;box-shadow:0 1px 4px rgba(0,0,0,0.05)}
+.yr-card:hover{border-color:var(--b2);background:var(--b4)}
+.yr-name{font-size:16px;font-weight:800;color:var(--b1)}
+.yr-batch{font-size:12px;color:var(--t2);font-weight:600;margin-top:2px}
+.yr-count{font-size:11px;color:var(--t3);margin-top:8px;font-weight:600}
+.yr-card.old .yr-name{color:var(--t2);font-size:15px}
+.list-hd{font-size:15px;font-weight:800;color:var(--b1);margin:4px 0 10px}
+.list-hd small{display:block;font-size:12px;color:var(--t3);font-weight:600;margin-top:1px}
+
+/* ─── PAID BY YEAR ──────────────────────────── */
+.head-row{padding:11px 0;border-bottom:1px solid var(--bd)}
+.head-row:last-child{border-bottom:none;padding-bottom:0}
+.head-row:first-child{padding-top:0}
+.head-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:13px}
+.head-lbl{font-weight:700;color:var(--t1)}
+.head-amt{font-weight:700;color:var(--t2);text-align:right}
+.head-amt b{color:var(--t1)}
+.prog{height:7px;background:#EEF2F7;border-radius:4px;overflow:hidden;margin:7px 0 5px}
+.prog i{display:block;height:100%;background:var(--b3);border-radius:4px}
+.prog.done i{background:var(--gr)}
+.head-due{font-size:11px;font-weight:700;color:var(--re)}
+.head-due.done{color:var(--gr)}
+.head-due.zero{color:var(--t3)}
+
+.sub-hd{display:flex;align-items:center;justify-content:space-between;
+  padding:12px 15px;border-top:1px solid var(--bd);background:#FAFCFF}
+.sub-title{font-size:12px;font-weight:700;color:var(--t2)}
+.p-note{display:block;font-size:10px;color:var(--t3);margin-top:2px}
+.unlocked td{background:var(--am-lt)}
+
+@media(min-width:600px){
+  .modal-bg{align-items:center}
+  .modal{border-radius:16px}
+}
+@media(max-width:480px){
+  .col-grid,.crs-grid{grid-template-columns:1fr 1fr}
+  .bal-val{font-size:14px}.bal-val.s{font-size:11px}
+}
+</style>
+</head>
+<body>
+
+<!-- ─── LOGIN ──────────────────────────────────────── -->
+<div id="screen-login">
+<div class="login-card">
+  <div class="login-brand">
+<img src="data:image/jpeg;base64,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" alt="B">
+    <div class="brand-text">
+      <div class="name">Bluebell One</div>
+      <div class="sub">Fee Management</div>
+    </div>
+  </div>
+  <div class="f-group"><label>Email</label>
+    <input type="email" id="l-email" placeholder="your@email.com" autocomplete="email"></div>
+  <div class="f-group"><label>Password</label>
+    <div style="position:relative">
+      <input type="password" id="l-pw" placeholder="••••••••" autocomplete="current-password" style="padding-right:40px;width:100%">
+      <button type="button" onclick="togglePw()" id="pw-eye"
+        style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:4px;color:#94A3B8;font-size:16px;line-height:1">👁️</button>
+    </div></div>
+  <button class="btn-login" onclick="doLogin()">Sign In →</button>
+  <div class="login-err" id="l-err"></div>
+  <div class="app-ver" id="ver-login"></div>
+</div>
+</div>
+
+<!-- ─── APP ────────────────────────────────────────── -->
+<div id="screen-app" style="display:none">
+  <div class="topbar">
+    <img src="data:image/jpeg;base64,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" alt="">
+    <div class="topbar-name">Bluebell One</div>
+    <div class="topbar-user" id="topbar-user"></div>
+    <button class="btn-out" id="btn-summary" onclick="openSummary()" style="display:none;margin-right:6px">View Summary</button>
+    <button class="btn-out" onclick="doLogout()">Sign out</button>
+  </div>
+  <div class="breadcrumb" id="breadcrumb"></div>
+  <div id="content"></div>
+  <div class="app-ver" id="ver-app"></div>
+</div>
+
+<button id="fab" onclick="openAddStudent()">＋</button>
+
+<!-- Modal: Add Student -->
+<div class="modal-bg" id="m-add-student">
+<div class="modal">
+  <div class="modal-title">Add Student</div>
+  <div id="add-student-body"></div>
+  <div class="btn-row">
+    <button class="btn btn-p" onclick="saveStudent()">Save Student</button>
+    <button class="btn btn-s" onclick="closeModal('m-add-student')">Cancel</button>
+  </div>
+</div></div>
+
+<!-- Modal: Set / Edit Fees -->
+<div class="modal-bg" id="m-fees">
+<div class="modal">
+  <div class="modal-title" id="fees-modal-title">Set Fee Structure</div>
+  <div class="modal-note">Enter amounts in ₹. Once saved, fees are locked. Only Dennis can edit.</div>
+  <div id="fees-body"></div>
+  <div class="btn-row">
+    <button class="btn btn-p" onclick="saveFees()">Save &amp; Lock 🔒</button>
+    <button class="btn btn-s" onclick="closeModal('m-fees')">Cancel</button>
+  </div>
+</div></div>
+
+<!-- Modal: Add Payment -->
+<div class="modal-bg" id="m-payment">
+<div class="modal">
+  <div class="modal-title" id="pay-modal-title">Add Payment</div>
+  <div id="payment-body"></div>
+  <div class="btn-row">
+    <button class="btn btn-p" id="btn-save-pmt" onclick="savePayment()">Save &amp; Lock 🔒</button>
+    <button class="btn btn-s" onclick="closeModal('m-payment')">Cancel</button>
+  </div>
+</div></div>
+
+<!-- Modal: Edit Consultant -->
+<div class="modal-bg" id="m-consult">
+<div class="modal">
+  <div class="modal-title">Consultant Details</div>
+  <div class="f-mb"><div class="f-lbl">Consultant Name</div>
+    <input class="f-inp" type="text" id="c-name" placeholder="e.g. Jithin"></div>
+  <div class="f-mb"><div class="f-lbl">Service Charge (₹)</div>
+    <input class="f-inp" type="number" id="c-charge" placeholder="0"></div>
+  <div class="btn-row">
+    <button class="btn btn-p" onclick="saveConsultant()">Save</button>
+    <button class="btn btn-s" onclick="closeModal('m-consult')">Cancel</button>
+  </div>
+</div></div>
+
+<!-- Modal: SC Disbursement -->
+<div class="modal-bg" id="m-disb">
+<div class="modal">
+  <div class="modal-title" id="disb-modal-title">Add Disbursement</div>
+  <div id="disb-body"></div>
+  <div class="btn-row">
+    <button class="btn btn-p" onclick="saveDisb()">Save &amp; Lock 🔒</button>
+    <button class="btn btn-s" onclick="closeModal('m-disb')">Cancel</button>
+  </div>
+</div></div>
+
+<!-- Modal: Summary Report -->
+<div class="modal-bg" id="m-report">
+<div class="modal" style="max-width:560px;width:95vw;max-height:90vh;display:flex;flex-direction:column">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-shrink:0">
+    <div class="modal-title" style="margin-bottom:0">Summary Report</div>
+    <button class="btn btn-s btn-sm" onclick="closeModal('m-report')">Close</button>
+  </div>
+  <div id="rpt-body" style="overflow-y:auto;flex:1;padding-bottom:4px"></div>
+</div></div>
+
+<div id="toast"></div>
+
+<script>
+// ── CONFIG ─────────────────────────────────────
+var WORKER_URL = 'https://bluebell-one-api.jubileem123.workers.dev';
+var APP_VERSION = '9 Oct 2026, 5:15 pm';
+
+// ── USERS ──────────────────────────────────────
+// NOTE: Replace with your own credentials before deploying
+var USERS = {
+  'admin@example.com':  {pw:'your-password-here',  role:'admin',  name:'Admin',  token:'your-admin-token'},
+  'editor@example.com': {pw:'your-password-here',  role:'editor', name:'Editor', token:'your-editor-token'}
+};
+
+// ── STRUCTURE ──────────────────────────────────
+var COLLEGES = [
+  { id:'sneha',      name:'Sneha College of Nursing',            icon:'🏥', photo:'col-sneha.jpg',
+    courses:['BSc Nursing','GNM','MSc Nursing','PBBSc Nursing'] },
+  { id:'vijayanagar',name:'Vijayanagar College of Nursing',     icon:'🏫', photo:'col-vijayanagar.jpg',
+    courses:['BSc Nursing','GNM','PBBSc Nursing'] },
+  { id:'jubilee',    name:'Jubilee Mission College of Nursing',  icon:'🌟', photo:'col-jubilee.jpg',
+    cats:[
+      {id:'nursing', name:'Nursing',               icon:'💉', courses:['BSc Nursing','GNM','MSc Nursing','PBBSc Nursing','Lateral Entry']},
+      {id:'bpt',     name:'BPT',                   icon:'🦾', courses:[]},
+      {id:'allied',  name:'Allied Health Sciences', icon:'🔬', courses:['BSc MIT','BSc MLT','BSc AT/T']}
+    ]
+  },
+  { id:'antony',     name:"Saint Antony's College of Nursing",  icon:'✝️', photo:'col-antony.jpg',
+    courses:['BSc Nursing','GNM'] },
+  { id:'prestige',   name:'Prestige College of Nursing',        icon:'🏆', photo:'col-prestige.jpg',
+    courses:['BSc Nursing','GNM','PBBSc Nursing'] }
+];
+
+// Course length in years
+var DURATION = {'MSc Nursing':2,'BSc Nursing':4,'PBBSc Nursing':2,'GNM':3,'Lateral Entry':2,
+                'BSc MIT':4,'BSc MLT':4,'BSc AT/T':4,'bpt':4,'MIT':4,'MLT':4,'AT/OT':4};
+var ACAD_START_MONTH = 5; // June rolls the academic year forward
+
+// ── STATE ──────────────────────────────────────
+var CU = null;
+var NAV = {};
+var DB = {};
+var FILTER = 'all';
+var API_TOKEN = null;
+var _feeSid = null, _paySid = null, _payEditId = null, _conSid = null, _disbSid = null, _disbEditId = null;
+
+// ── API HELPERS ────────────────────────────────
+function apiHeaders(){
+  return {'Content-Type':'application/json','Authorization':'Bearer '+(API_TOKEN||'')};
+}
+function apiGet(path,cb){
+  fetch(WORKER_URL+path,{headers:apiHeaders()})
+    .then(function(r){return r.json()})
+    .then(cb)
+    .catch(function(e){console.warn('API GET failed',e);cb(null)});
+}
+function apiSend(method,path,body,cb){
+  var opts={method:method,headers:apiHeaders()};
+  if(body!=null)opts.body=JSON.stringify(body);
+  fetch(WORKER_URL+path,opts)
+    .then(function(r){
+      return r.json().catch(function(){return {}}).then(function(d){
+        if(!r.ok)throw new Error((d&&d.error)||('error '+r.status));
+        return d;
+      });
+    })
+    .then(function(d){if(cb)cb(d)})
+    .catch(function(e){console.warn('API '+method+' '+path+' failed',e);syncFailed(e.message)});
+}
+function apiPost(path,body,cb){apiSend('POST',path,body,cb)}
+function apiPut(path,body,cb){apiSend('PUT',path,body,cb)}
+function apiDel(path,cb){apiSend('DELETE',path,null,cb)}
+function syncFailed(why){
+  showToast('⚠ Not saved to server ('+why+'). Please try again.','err');
+  loadDB(function(){render()});
+}
+
+// ── ACADEMIC YEAR HELPERS ──────────────────────
+function acadStart(){var d=new Date();return d.getMonth()>=ACAD_START_MONTH?d.getFullYear():d.getFullYear()-1}
+function durationOf(course){return DURATION[course]||4}
+function ordinal(n){return n+({1:'st',2:'nd',3:'rd'}[n]||'th')}
+function batchLabel(b){return b+'–'+(b+1)}
+function yearOfStudy(batch){return acadStart()-batch+1}
+function yearText(s){
+  var y=yearOfStudy(s.batch),d=durationOf(s.course);
+  if(y<1)return'Upcoming';if(y>d)return'Completed';return ordinal(y)+' Year';
+}
+function curCourseKey(){return NAV.course||NAV.cat}
+function oldestActiveBatch(){return acadStart()-durationOf(curCourseKey())+1}
+
+// ── PERSIST ────────────────────────────────────
+function saveDB(){ try{ localStorage.setItem('bb1_db',JSON.stringify(DB)); }catch(e){} }
+
+var FEE_GROUP_B = ['jubilee','prestige'];
+var FEE_STRUCT = {
+  // Sneha
+  'sneha|GNM':              {admission:10000,yr1:223000,yr2:100000,yr3:100000},
+  'sneha|PBBSc Nursing':    {admission:25000,yr1:125000,yr2:180000},
+  'sneha|MSc Nursing':      {admission:25000,yr1:165000,yr2:180000},
+  // Vijayanagar
+  'vijayanagar|PBBSc Nursing':{admission:25000,yr1:115000,yr2:180000},
+  'vijayanagar|GNM':        {admission:10000,yr1:223000,yr2:100000,yr3:100000},
+  // Antony
+  'antony|GNM':             {admission:10000,yr1:223000,yr2:100000,yr3:100000},
+  // Prestige
+  'prestige|GNM':           {admission:10000,yr1:225000,yr2:105000,yr3:105000},
+  'prestige|PBBSc Nursing': {admission:25000,yr1:333000,yr2:208000},
+  // Jubilee Nursing
+  'jubilee|MSc Nursing':    {admission:25000,yr1:105000,yr2:208000},
+  'jubilee|GNM':            {admission:10000,yr1:225000,yr2:105000,yr3:105000},
+  'jubilee|Lateral Entry':  {admission:25000,yr1:165000,yr2:208000},
+  'jubilee|PBBSc Nursing':  {admission:25000,yr1:333000,yr2:208000},
+  // Jubilee BPT
+  'jubilee|bpt':            {admission:25000,yr1:510000,yr2:208000,yr3:208000,yr4:208000},
+  // Jubilee Allied
+  'jubilee|BSc MIT':        {admission:25000,yr1:375000,yr2:208000,yr3:208000,yr4:208000},
+  'jubilee|BSc MLT':        {admission:25000,yr1:375000,yr2:208000,yr3:208000,yr4:208000},
+  'jubilee|BSc AT/T':       {admission:25000,yr1:395000,yr2:208000,yr3:208000,yr4:208000},
+};
+function feeStructFor(s){
+  var course=s.cat==='bpt'?'bpt':s.course;
+  if(course==='BSc Nursing'){
+    var isB=FEE_GROUP_B.indexOf(s.college)>-1;
+    return {admission:25000,yr1:isB?333000:313000,yr2:isB?208000:180000,
+            yr3:isB?208000:180000,yr4:isB?208000:180000,locked:true};
+  }
+  var key=s.college+'|'+course;
+  var f=FEE_STRUCT[key];
+  if(!f)return null;
+  var d=durationOf(s.course);
+  var r={admission:f.admission,yr1:f.yr1,locked:true};
+  if(d>=2&&f.yr2!=null)r.yr2=f.yr2;
+  if(d>=3&&f.yr3!=null)r.yr3=f.yr3;
+  if(d>=4&&f.yr4!=null)r.yr4=f.yr4;
+  return r;
+}
+
+function migrate(){
+  Object.values(DB).forEach(function(s){
+    if(s.batch==null)s.batch=acadStart();
+    if(!s.sc_disb)s.sc_disb=[];
+    if(!s.payments)s.payments=[];
+    if(s.fees){delete s.fees.by;delete s.fees.on;}
+    s.payments.concat(s.sc_disb).forEach(function(x){delete x.by;delete x.edited_by;delete x.edited_on;});
+    if(s.college==='alphonsa'){s.college='jubilee';if(!s.cat)s.cat='nursing';}
+    var newFee=feeStructFor(s);
+    if(newFee&&!s.fees){
+      s.fees=newFee;
+    }
+  });
+}
+
+function loadDB(onDone){
+  if(API_TOKEN){
+    apiGet('/api/students',function(list){
+      if(list&&Array.isArray(list)&&list.length>0){
+        DB={};
+        list.forEach(function(s){DB[s.id]=s;});
+        migrate(); saveDB();
+        if(onDone)onDone(); else render();
+        return;
+      }
+      loadFromLocal(onDone);
+    });
+  } else {
+    loadFromLocal(onDone);
+  }
+}
+
+function loadFromLocal(onDone){
+  try{
+    var stored=JSON.parse(localStorage.getItem('bb1_db')||'null');
+    if(stored&&Object.keys(stored).length>0){ DB=stored; migrate(); saveDB(); if(onDone)onDone(); return; }
+  }catch(e){}
+  DB={"ADMMSRAR72T":{"id":"ADMMSRAR72T","name":"RENU MARY VARGHESE","mobile":"8547989098","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"FELIX","service_charge":0,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRAR72T_0","amount":25000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRAX0ET":{"id":"ADMMSRAX0ET","name":"SNEHA P","mobile":"9526542161","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"FELIX","service_charge":0,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRAX0ET_0","amount":75000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true},{"id":"PADMMSRAX0ET_1","amount":100000,"date":"2026-01-01","for_yr":"Year 1","note":"Imported","locked":true}]},"ADMMSRB0H10":{"id":"ADMMSRB0H10","name":"ARJUN MAHESH","mobile":"9526447158","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"FAZIL","service_charge":5000,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRB0H10_0","amount":5000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRB2004":{"id":"ADMMSRB2004","name":"ASWATHY ANAND","mobile":"0000000","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"FELIX","service_charge":15000,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRB2004_0","amount":10000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRB37JG":{"id":"ADMMSRB37JG","name":"AYUSH KRISHNA","mobile":"7356757050","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"FELIX","service_charge":0,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRB37JG_0","amount":10000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRB48OS":{"id":"ADMMSRB48OS","name":"MIDHUN MANOJ","mobile":"8590305735","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"VISHAK","service_charge":0,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRB48OS_0","amount":75000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true},{"id":"PADMMSRB48OS_1","amount":30000,"date":"2026-01-01","for_yr":"Year 1","note":"Imported","locked":true}]},"ADMMSRB6NWK":{"id":"ADMMSRB6NWK","name":"ASHELY JOHN","mobile":"0","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"JITHIN","service_charge":0,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRB6NWK_0","amount":25000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRBARGC":{"id":"ADMMSRBARGC","name":"AFISHIKTHA K.S","mobile":"0","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"DENNIS SIR","service_charge":0,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRBARGC_0","amount":20000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRBBQ0S":{"id":"ADMMSRBBQ0S","name":"KEERTHANA M.P","mobile":"0","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"DENNIS SIR","service_charge":0,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRBBQ0S_0","amount":25000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRBCSPN":{"id":"ADMMSRBCSPN","name":"AMALDEV K.M","mobile":"9349014439","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"ROBIN","service_charge":0,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRBCSPN_0","amount":10000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRBDV3W":{"id":"ADMMSRBDV3W","name":"ATHULYA BIJU","mobile":"8543734247","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"FELIX","service_charge":15000,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRBDV3W_0","amount":10000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRBF4BG":{"id":"ADMMSRBF4BG","name":"ANUSREE K ANIL","mobile":"0","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"SHINE","service_charge":10000,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRBF4BG_0","amount":15000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRBG5L7":{"id":"ADMMSRBG5L7","name":"GOPIKA SANTHOSH","mobile":"0","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"SHINE","service_charge":10000,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRBG5L7_0","amount":15000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRBH0Q4":{"id":"ADMMSRBH0Q4","name":"ANAKHA ANUB","mobile":"0","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"FELIX","service_charge":0,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRBH0Q4_0","amount":10000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRBHXIJ":{"id":"ADMMSRBHXIJ","name":"HENA OOMMEN","mobile":"9074518199","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"FELIX","service_charge":5000,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRBHXIJ_0","amount":5000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRBJ3T7":{"id":"ADMMSRBJ3T7","name":"ARATHI P .A","mobile":"6238093649","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"FELIX","service_charge":5000,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRBJ3T7_0","amount":5000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRBKXKB":{"id":"ADMMSRBKXKB","name":"JINSHA K JOMON","mobile":"9846804343","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"FELIX","service_charge":5000,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRBKXKB_0","amount":5000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRBOW1R":{"id":"ADMMSRBOW1R","name":"RIYA R","mobile":"9048538949","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"FELIX","service_charge":10000,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRBOW1R_0","amount":55000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRBPR8E":{"id":"ADMMSRBPR8E","name":"ALBERT ANTONY","mobile":"0","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"JITHIN","service_charge":0,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRBPR8E_0","amount":10000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRBQM3F":{"id":"ADMMSRBQM3F","name":"JERIN JACOB PHILIP","mobile":"0","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"JITHIN","service_charge":0,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRBQM3F_0","amount":10000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRBSA6C":{"id":"ADMMSRBSA6C","name":"ABHAIDEV P.B","mobile":"9846770204","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"ROBIN","service_charge":0,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRBSA6C_0","amount":15000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRBT3PH":{"id":"ADMMSRBT3PH","name":"LENA SABU","mobile":"0","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"MANJUANNA","service_charge":0,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRBT3PH_0","amount":25000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRBU1XO":{"id":"ADMMSRBU1XO","name":"ANGEL SHINTO","mobile":"0","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"MINI AUNTY","service_charge":0,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRBU1XO_0","amount":25000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRBV5E4":{"id":"ADMMSRBV5E4","name":"JITTU BINOY","mobile":"8921706774","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"FELIX","service_charge":5000,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRBV5E4_0","amount":10000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRBW4JV":{"id":"ADMMSRBW4JV","name":"AARON BIJU","mobile":"0","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"JITHIN","service_charge":55000,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRBW4JV_0","amount":45000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRBX5Z0":{"id":"ADMMSRBX5Z0","name":"ANANTHA KRISHNAN","mobile":"0","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"FELIX","service_charge":5000,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRBX5Z0_0","amount":5000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRBY5JV":{"id":"ADMMSRBY5JV","name":"ALPHI MATHEW JOSEPH","mobile":"8593960123","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"FELIX","service_charge":15000,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRBY5JV_0","amount":10000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]},"ADMMSRBZ36B":{"id":"ADMMSRBZ36B","name":"GRACE ANN THOMAS","mobile":"0","college":"jubilee","cat":"nursing","course":"BSc Nursing","batch":2026,"consultant":"JITHIN","service_charge":0,"sc_disb":[],"fees":{"admission":25000,"yr1":333000,"yr2":208000,"yr3":208000,"yr4":208000,"locked":true},"payments":[{"id":"PADMMSRBZ36B_0","amount":10000,"date":"2026-01-01","for_yr":"Admission","note":"Imported","locked":true}]}};
+  migrate(); saveDB();
+}
+
+// ── HELPERS ────────────────────────────────────
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function inr(n){return '₹'+(n||0).toLocaleString('en-IN')}
+function el(id){return document.getElementById(id)}
+function val(id){var e=el(id);return e?e.value.trim():''}
+function today(){return new Date().toISOString().slice(0,10)}
+function fmtDate(d){if(!d)return'';var p=d.split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:d}
+function byDate(arr){return arr.slice().sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0})}
+
+function totalFees(s){var f=s.fees||{};return(f.admission||0)+(f.yr1||0)+(f.yr2||0)+(f.yr3||0)+(f.yr4||0)}
+function totalPaid(s){return(s.payments||[]).reduce(function(a,p){return a+(p.amount||0)},0)}
+function balance(s){return totalFees(s)-totalPaid(s)}
+function payStatus(s){
+  if(!s.fees||!s.fees.locked)return'none';
+  var tp=totalPaid(s),tf=totalFees(s);
+  if(tp>=tf)return'paid';if(tp>0)return'part';return'unpd';
+}
+
+function headLabel(key){
+  if(key==='Admission')return'Admission';
+  var m=/^Year (\d)$/.exec(key||'');return m?ordinal(+m[1])+' Year':(key||'—');
+}
+function feeHeads(s){
+  var f=s.fees||{},d=durationOf(s.course);
+  var h=[{key:'Admission',fee:f.admission||0}];
+  for(var i=1;i<=4;i++){ if(i<=d||f['yr'+i]) h.push({key:'Year '+i,fee:f['yr'+i]||0}); }
+  return h.filter(function(x){return x.fee>0});
+}
+function paidFor(s,key){
+  return(s.payments||[]).reduce(function(a,p){return a+(p.for_yr===key?p.amount:0)},0);
+}
+function scPaid(s){return(s.sc_disb||[]).reduce(function(a,d){return a+(d.amount||0)},0)}
+
+function showToast(msg,err){
+  var t=el('toast');t.textContent=msg;t.className=err?'err':'';t.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t=setTimeout(function(){t.classList.remove('show')},err?6000:2600);
+}
+function openModal(id){el(id).classList.add('open')}
+function closeModal(id){el(id).classList.remove('open')}
+
+// ── AUTH ───────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function(){
+  el('ver-login').textContent=el('ver-app').textContent='Version: '+APP_VERSION;
+  el('l-pw').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin()});
+  try{
+    var s=JSON.parse(localStorage.getItem('bb1')||'null');
+    if(s&&USERS[s.email]){
+      CU=s;
+      API_TOKEN=s.token||USERS[s.email].token||null;
+      launchApp();
+    }
+  }catch(e){}
+  document.querySelectorAll('.modal-bg').forEach(function(m){
+    m.addEventListener('click',function(e){if(e.target===m)closeModal(m.id)})
+  });
+  window.addEventListener('popstate',function(e){
+    var openM=document.querySelector('.modal-bg.open');
+    if(openM){
+      openM.classList.remove('open');
+      history.pushState({nav:JSON.parse(JSON.stringify(NAV))},'');
+      return;
+    }
+    var s=e.state;
+    NAV=(s&&s.nav)?s.nav:navFromHash();
+    render();
+  });
+});
+
+function togglePw(){
+  var inp=el('l-pw');
+  inp.type=inp.type==='password'?'text':'password';
+  el('pw-eye').textContent=inp.type==='password'?'👁️':'🙈';
+}
+function doLogin(){
+  var email=val('l-email').toLowerCase();
+  var pw=el('l-pw').value;
+  var u=USERS[email];
+  if(!u||u.pw!==pw){el('l-err').textContent='Incorrect email or password';return}
+  CU={email:email,role:u.role,name:u.name};
+  API_TOKEN=u.token||null;
+  try{localStorage.setItem('bb1',JSON.stringify({email:email,role:u.role,name:u.name,token:API_TOKEN}))}catch(e){}
+  el('l-err').textContent='';
+  launchApp();
+}
+
+function launchApp(){
+  var want=navFromHash();
+  el('screen-login').style.display='none';
+  el('screen-app').style.display='flex';
+  el('screen-app').style.flexDirection='column';
+  var displayName=CU.email==='dennisvcn@gmail.com'?'Dennis T Varghese':esc(CU.name);
+  el('topbar-user').innerHTML='<b>'+displayName+'</b>';
+  el('btn-summary').style.display='none';
+  NAV={};
+  el('content').innerHTML='<div style="text-align:center;padding:40px;color:#94A3B8;font-size:14px">Loading…</div>';
+  loadDB(function(){
+    NAV=validNav(want);
+    history.replaceState({nav:JSON.parse(JSON.stringify(NAV))},'',navUrl(NAV));
+    render();
+  });
+}
+
+function doLogout(){
+  NAV={};history.replaceState({nav:{}},'',navUrl({}));
+  CU=null;try{localStorage.removeItem('bb1')}catch(e){}
+  el('screen-app').style.display='none';
+  el('screen-login').style.display='flex';
+  el('fab').style.display='none';
+}
+
+// ── NAVIGATION ─────────────────────────────────
+var NAV_KEYS=['college','cat','course','batch','sid'];
+function navUrl(n){
+  var p=new URLSearchParams();
+  NAV_KEYS.forEach(function(k){if(n[k]!=null&&n[k]!=='')p.set(k,n[k])});
+  var s=p.toString();
+  return location.pathname+location.search+(s?'#'+s:'');
+}
+function navFromHash(){
+  var p=new URLSearchParams((location.hash||'').replace(/^#/,'')),n={};
+  NAV_KEYS.forEach(function(k){var v=p.get(k);if(v)n[k]=v});
+  if(n.batch&&/^\d+$/.test(n.batch))n.batch=+n.batch;
+  return n;
+}
+function validNav(n){
+  var col=n.college&&getCollege(n.college);
+  if(!col)return {};
+  if(n.cat&&!getCat(col,n.cat))return {college:n.college};
+  if(n.sid&&!DB[n.sid]){n=JSON.parse(JSON.stringify(n));delete n.sid;}
+  return n;
+}
+function _nav(n){ NAV=n; history.pushState({nav:JSON.parse(JSON.stringify(n))},'',navUrl(n)); render(); }
+function goHome()      { _nav({}); }
+function goCollege(id) { _stuListInit=false; _nav({college:id}); }
+function goCat(id)     { _stuListInit=false; _nav({college:NAV.college,cat:id}); }
+function goCourse(name){ _stuListInit=false; _nav({college:NAV.college,cat:NAV.cat,course:name}); }
+function goBatch(b)    { FILTER='all'; STU_SEARCH=''; _stuListInit=false; _nav({college:NAV.college,cat:NAV.cat,course:NAV.course,batch:b}); }
+function goStudent(id) { _nav({college:NAV.college,cat:NAV.cat,course:NAV.course,batch:NAV.batch,sid:id}); }
+
+function getCollege(id)       {return COLLEGES.find(function(c){return c.id===id})}
+function getCat(col,id)       {return(col.cats||[]).find(function(c){return c.id===id})}
+function hasBatch(){return NAV.batch!==undefined&&NAV.batch!==null}
+
+function updateSummaryBtn(){
+  var btn=el('btn-summary');if(!btn)return;
+  if(CU&&CU.role==='admin'&&NAV.college){
+    var col=getCollege(NAV.college);
+    btn.textContent='View '+col.name.split(' ')[0]+' Summary';
+    btn.style.display='inline-block';
+  }else{
+    btn.style.display='none';
+  }
+}
+
+// ── RENDER ─────────────────────────────────────
+function render(){
+  renderBreadcrumb();
+  var col=NAV.college?getCollege(NAV.college):null;
+  if(NAV.sid)                    renderDetail();
+  else if(hasBatch())            renderStudents();
+  else if(NAV.course)            renderBatchGrid();
+  else if(NAV.cat){
+    var cat=getCat(col,NAV.cat);
+    if(cat&&!cat.courses.length) renderBatchGrid(); 
+    else                         renderCourseGrid(cat?cat.courses:[]);
+  }
+  else if(NAV.college){
+    if(col.cats) renderCatGrid(col.cats);
+    else         renderCourseGrid(col.courses);
+  }
+  else renderHome();
+  el('fab').style.display=(!NAV.sid&&hasBatch()&&NAV.batch!=='old')?'flex':'none';
+  updateSummaryBtn();
+  window.scrollTo(0,0);
+}
+
+function crumbForBatch(b){
+  if(b==='old')return'Earlier Batches';
+  return batchLabel(b)+' Batch';
+}
+
+function renderBreadcrumb(){
+  var parts=[{label:'Home',fn:"goHome()"}];
+  if(NAV.college){var c=getCollege(NAV.college);parts.push({label:c.name,fn:"goCollege('"+NAV.college+"')"})}
+  if(NAV.cat&&NAV.college){var cat=getCat(getCollege(NAV.college),NAV.cat);if(cat)parts.push({label:cat.name,fn:"goCat('"+NAV.cat+"')"})}
+  if(NAV.course)parts.push({label:NAV.course,fn:"goCourse('"+esc(NAV.course)+"')"});
+  if(hasBatch())parts.push({label:crumbForBatch(NAV.batch),fn:"goBatch("+(NAV.batch==='old'?"'old'":NAV.batch)+")"});
+  if(NAV.sid&&DB[NAV.sid])parts.push({label:DB[NAV.sid].name,fn:null});
+  el('breadcrumb').innerHTML=parts.map(function(p,i){
+    var last=i===parts.length-1;
+    return(i?'<span class="bc-sep">›</span>':'')+
+      (last?'<span class="bc-cur">'+esc(p.label)+'</span>'
+           :'<span class="bc-link" onclick="'+p.fn+'">'+esc(p.label)+'</span>');
+  }).join('');
+}
+
+var SLIDES = [
+  {src:'slide1.jpg', alt:'Campus'},
+  {src:'slide2.jpg', alt:'Campus'},
+  {src:'slide3.jpg', alt:'Campus'},
+  {src:'slide4.jpg', alt:'Campus'},
+  {src:'slide5.jpg', alt:'Campus'}
+];
+var _slideIdx = 0, _slideTimer = null;
+
+function renderHome(){
+  var slidesHtml = SLIDES.map(function(s,i){
+    return '<div class="slide">'+
+      '<img src="'+s.src+'" alt="'+esc(s.alt)+'" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'flex\'">'+
+      '<div class="slide-fallback" style="display:none">🏥</div>'+
+      '</div>';
+  }).join('');
+  var dotsHtml = SLIDES.map(function(_,i){
+    return '<button class="slider-dot'+(i===0?' on':'')+'" onclick="slideTo('+i+')"></button>';
+  }).join('');
+
+  var colsHtml = COLLEGES.map(function(c){
+    var img = c.photo
+      ? '<img class="col-thumb" src="'+c.photo+'" alt="'+esc(c.name)+'" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'flex\'"><div class="col-thumb-fb" style="display:none">'+c.icon+'</div>'
+      : '<div class="col-thumb-fb">'+c.icon+'</div>';
+    return '<div class="col-card" onclick="goCollege(\''+c.id+'\')">'+
+      img+
+      '<div class="col-info"><div class="col-name">'+esc(c.name)+'</div></div></div>';
+  }).join('');
+
+  el('content').innerHTML=
+    '<div class="slider-wrap" id="slider-wrap">'+
+      '<div class="slider-track" id="slider-track">'+slidesHtml+'</div>'+
+      '<div class="slider-dots" id="slider-dots">'+dotsHtml+'</div>'+
+      '<button class="slider-prev" onclick="slideTo((_slideIdx-1+'+SLIDES.length+')%'+SLIDES.length+')">&#8249;</button>'+
+      '<button class="slider-next" onclick="slideTo((_slideIdx+1)%'+SLIDES.length+')">&#8250;</button>'+
+    '</div>'+
+    '<div class="sec-lbl">Select College</div>'+
+    '<div class="col-grid">'+colsHtml+'</div>';
+
+  _slideIdx = 0;
+  _startSlider();
+}
+
+function slideTo(i){
+  _slideIdx = i;
+  var track = el('slider-track');
+  if(track) track.style.transform = 'translateX(-'+(_slideIdx*100)+'%)';
+  var dots = document.querySelectorAll('.slider-dot');
+  dots.forEach(function(d,j){ d.classList.toggle('on', j===_slideIdx); });
+  _resetSliderTimer();
+}
+
+function _startSlider(){
+  _resetSliderTimer();
+}
+function _resetSliderTimer(){
+  if(_slideTimer) clearInterval(_slideTimer);
+  _slideTimer = setInterval(function(){
+    if(!el('slider-track')){ clearInterval(_slideTimer); return; }
+    slideTo((_slideIdx+1) % SLIDES.length);
+  }, 4000);
+}
+
+function renderCatGrid(cats){
+  el('content').innerHTML='<div class="sec-lbl" style="padding:16px 0 4px">Select Department</div>'+
+    '<div class="crs-grid">'+cats.map(function(c){
+      var cnt=Object.values(DB).filter(function(s){return s.college===NAV.college&&s.cat===c.id}).length;
+      return '<div class="crs-card" onclick="goCat(\''+c.id+'\')">'+
+        '<div class="crs-icon">'+c.icon+'</div>'+
+        '<div class="crs-name">'+esc(c.name)+'</div>'+
+        '<div class="crs-cnt">'+cnt+' student'+(cnt===1?'':'s')+'</div></div>';
+    }).join('')+'</div>';
+}
+
+function renderCourseGrid(courses){
+  var col=getCollege(NAV.college),cat=NAV.cat?getCat(col,NAV.cat):null;
+  var inScope=function(s){return s.college===NAV.college&&(!NAV.cat||s.cat===NAV.cat)};
+  el('content').innerHTML='<div class="sec-lbl" style="padding:16px 0 4px">Select Course</div>'+
+    '<div class="crs-grid">'+courses.map(function(name){
+      var cnt=Object.values(DB).filter(function(s){return inScope(s)&&s.course===name}).length;
+      return '<div class="crs-card" onclick="goCourse(\''+esc(name)+'\')">'+
+        '<div class="crs-name">'+esc(name)+'</div>'+
+        '<div class="crs-cnt">'+cnt+' student'+(cnt===1?'':'s')+'</div></div>';
+    }).join('')+'</div>';
+}
+
+function scopeStudents(){
+  var key=curCourseKey();
+  return Object.values(DB).filter(function(s){
+    if(s.college!==NAV.college)return false;
+    if(NAV.cat&&s.cat!==NAV.cat)return false;
+    return s.course===key;
+  });
+}
+
+function renderBatchGrid(){
+  var d=durationOf(curCourseKey()),start=acadStart(),all=scopeStudents(),oldest=start-d+1;
+  var cards='';
+  for(var y=1;y<=d;y++){
+    var b=start-y+1;
+    var list=all.filter(function(s){return s.batch===b});
+    var due=list.filter(function(s){var st=payStatus(s);return st==='part'||st==='unpd'}).length;
+    cards+='<div class="yr-card" onclick="goBatch('+b+')">'+
+      '<div class="yr-name">'+batchLabel(b)+' Batch</div>'+
+      '<div class="yr-batch">Currently '+ordinal(y)+' Year</div>'+
+      '<div class="yr-count">'+list.length+' student'+(list.length===1?'':'s')+(due?', '+due+' with balance':'')+'</div></div>';
+  }
+  var olderList=all.filter(function(s){return s.batch<oldest}),older=olderList.length;
+  if(older){
+    cards+='<div class="yr-card old" onclick="goBatch(\'old\')">'+
+      '<div class="yr-name">Earlier Batches</div>'+
+      '<div class="yr-batch">Before '+batchLabel(oldest)+'</div>'+
+      '<div class="yr-count">'+older+' student'+(older===1?'':'s')+'</div></div>';
+  }
+  el('content').innerHTML='<div class="sec-lbl" style="padding:16px 0 4px">Select Batch</div>'+
+    '<div class="yr-grid">'+cards+'</div>';
+}
+
+var STU_SEARCH='';
+var _stuListInit=false;
+
+function renderStudents(){
+  var oldest=oldestActiveBatch();
+  var hd;
+  if(NAV.batch==='old') hd='<div class="list-hd">Earlier Batches<small>Before '+batchLabel(oldest)+'</small></div>';
+  else{
+    var y=yearOfStudy(NAV.batch);
+    hd='<div class="list-hd">'+batchLabel(NAV.batch)+' Batch<small>'+ordinal(y)+' Year</small></div>';
+  }
+  
+  if(!_stuListInit||!el('stu-list-body')){
+    _stuListInit=true;
+    el('content').innerHTML=hd+
+      '<div class="search-wrap"><span class="si">🔍</span>'+
+      '<input id="stu-search-inp" type="search" placeholder="Search student..." autocomplete="off" '+
+      'oninput="STU_SEARCH=this.value.toLowerCase().trim();_renderStuBody()"></div>'+
+      '<div id="stu-list-body"></div>';
+  }
+  _renderStuBody();
+}
+
+function _renderStuBody(){
+  var oldest=oldestActiveBatch();
+  var all=scopeStudents().filter(function(s){
+    if(NAV.batch==='old'){ if(!(s.batch<oldest))return false; }
+    else if(s.batch!==NAV.batch)return false;
+    var st=payStatus(s);
+    if(FILTER==='paid'&&st!=='paid')return false;
+    if(FILTER==='unpaid'&&(st==='paid'||st==='none'))return false;
+    if(STU_SEARCH&&!(s.name||'').toLowerCase().includes(STU_SEARCH))return false;
+    return true;
+  });
+  
+  all.sort(function(a,b){return(a.name||'').localeCompare(b.name||'')});
+  
+  var tabs='<div class="tabs">'+['all','paid','unpaid'].map(function(f){
+    return '<button class="tab'+(FILTER===f?' on':'')+'" onclick="setFilter(\''+f+'\')">'+
+      {all:'All',paid:'Fully Paid',unpaid:'Has Balance'}[f]+'</button>';
+  }).join('')+'</div>';
+  
+  var isAdmin=CU&&CU.role==='admin';
+  var list=all.length?'<div class="stu-list">'+all.map(function(s){
+    var st=payStatus(s);
+    var cls={paid:'b-paid',part:'b-part',unpd:'b-unpd',none:'b-none'}[st];
+    var lbl={paid:'Paid',part:'Partial',unpd:'Unpaid',none:'Fees pending'}[st];
+    var tp=totalPaid(s),tf=totalFees(s);
+    var delBtn=isAdmin?'<button class="btn-del-stu" title="Delete student" onclick="event.stopPropagation();deleteStudent(\''+s.id+'\')">🗑️</button>':'';
+    return '<div class="stu-card">'+
+      '<div class="stu-card-body" onclick="goStudent(\''+s.id+'\')">'+
+      '<div class="avatar">'+esc((s.name||'?')[0].toUpperCase())+'</div>'+
+      '<div class="stu-info"><div class="stu-name">'+esc(s.name)+'</div>'+
+        '<div class="stu-sub">'+(tp>0?'Paid '+inr(tp):'Nothing paid yet')+(tf>0&&tp<tf?', balance '+inr(tf-tp):'')+'</div></div>'+
+      '<span class="badge '+cls+'">'+lbl+'</span></div>'+
+      delBtn+'</div>';
+  }).join('')+'</div>':
+    '<div class="empty"><div class="ico">👤</div><p>No students found</p>'+
+      (STU_SEARCH?'<small>No match for "'+esc(STU_SEARCH)+'"</small>':FILTER!=='all'?'<small>Try "All" filter</small>':'<small>Tap + to add a student</small>')+'</div>';
+
+  var body=el('stu-list-body');
+  if(body) body.innerHTML=tabs+list;
+}
+
+function setFilter(f){FILTER=f;_renderStuBody()}
+
+// ── STUDENT DETAIL ─────────────────────────────
+function lockCell(kind,sid,item,isAdmin){
+  if(item.locked){
+    return '🔒'+(isAdmin?'<button class="btn btn-sm btn-d" style="margin-left:5px" onclick="unlockItem(\''+kind+'\',\''+sid+'\',\''+item.id+'\')">Unlock</button>':'');
+  }
+  var editFn=kind==='pay'?'openPayment':'openDisb';
+  return '<button class="btn btn-sm btn-s" onclick="'+editFn+'(\''+sid+'\',\''+item.id+'\')">Edit</button>'+
+    (isAdmin?'<button class="btn btn-sm btn-d" style="margin-left:5px" onclick="deleteItem(\''+kind+'\',\''+sid+'\',\''+item.id+'\')">Delete</button>':'');
+}
+
+function renderDetail(){
+  var s=DB[NAV.sid];if(!s){el('content').innerHTML='<div class="empty"><p>Not found</p></div>';return}
+  var f=s.fees||{},tf=totalFees(s),tp=totalPaid(s),bal=tf-tp;
+  var feesSet=f.locked;var isAdmin=CU.role==='admin';
+  var pmts=byDate(s.payments||[]);
+  var courseName=s.course==='bpt'?'BPT':s.course;
+
+  var h='<div class="det-hdr"><div class="det-name">'+esc(s.name)+'</div>'+
+    '<div class="det-sub">'+esc(courseName||'')+', '+batchLabel(s.batch)+' Batch ('+yearText(s)+')</div>'+
+    '<div class="det-sub">'+(s.college?esc(getCollege(s.college).name):'')+'</div></div>';
+
+  if(feesSet){
+    h+='<div class="bal-row">'+
+      '<div class="bal-cell"><div class="bal-val s">'+inr(tf)+'</div><div class="bal-lbl">Total Fees</div></div>'+
+      '<div class="bal-cell"><div class="bal-val g s">'+inr(tp)+'</div><div class="bal-lbl">Paid</div></div>'+
+      '<div class="bal-cell"><div class="bal-val s'+(bal>0?' r':' g')+'">'+inr(bal)+'</div><div class="bal-lbl">Balance</div></div>'+
+    '</div>';
+  }
+  h+='<div class="card"><div class="card-hd">'+
+    '<div class="card-title">Total Fee '+(feesSet?'<span>🔒</span>':'<span>⚠️ Not set</span>')+'</div>'+
+    (isAdmin?'<button class="btn btn-s btn-sm" onclick="openFees(\''+s.id+'\')">'+(feesSet?'✏️️ Edit':'+ Set Fees')+'</button>':'')+'</div>';
+  if(feesSet){
+    h+='<div class="card-body"><table class="fee-tbl">'+
+      feeHeads(s).map(function(x){
+        return '<tr><td class="fee-lbl">'+headLabel(x.key)+'</td><td>'+inr(x.fee)+'</td></tr>';
+      }).join('')+
+      '<tr><td class="fee-lbl">Total</td><td>'+inr(tf)+'</td></tr>'+
+    '</table>';
+    h+='</div>';
+  }else{
+    h+='<div class="card-body" style="color:var(--t3);font-size:13px">'+
+      (isAdmin?'No fees set. Tap "+ Set Fees" above.':'Fee structure not set yet.')+'</div>';
+  }
+  h+='</div>';
+
+  if(feesSet){
+    h+='<div class="card"><div class="card-hd"><div class="card-title">Fees Paid by Year</div>'+
+      (bal>0?'<button class="btn btn-p btn-sm" onclick="openPayment(\''+s.id+'\')">+ Add Payment</button>':'')+'</div>'+
+      '<div class="card-body">'+
+      feeHeads(s).map(function(x){
+        var paid=paidFor(s,x.key),due=x.fee-paid,done=due<=0;
+        var pct=Math.min(100,Math.round(paid/x.fee*100));
+        return '<div class="head-row">'+
+          '<div class="head-top"><span class="head-lbl">'+headLabel(x.key)+'</span>'+
+          '<span class="head-amt"><b>'+inr(paid)+'</b> of '+inr(x.fee)+'</span></div>'+
+          '<div class="prog'+(done?' done':'')+'"><i style="width:'+pct+'%"></i></div>'+
+          (done?'<div class="head-due done">✓ Cleared</div>'
+               :'<div class="head-due'+(paid?'':' zero')+'">'+inr(due)+' due</div>')+
+        '</div>';
+      }).join('')+
+      '</div></div>';
+  }
+
+  h+='<div class="card"><div class="card-hd">'+
+    '<div class="card-title">Payment History</div>'+
+    '<span style="font-size:11px;color:var(--t3);font-weight:600">'+pmts.length+' payment'+(pmts.length===1?'':'s')+'</span></div>';
+  if(!pmts.length){
+    h+='<div class="card-body"><div class="empty" style="padding:16px 0"><p>No payments yet</p></div></div>';
+  }else{
+    h+='<div class="tbl-wrap"><table class="pmt-tbl"><thead><tr>'+
+      '<th>Date</th><th>For</th><th>Amount</th><th></th>'+
+    '</tr></thead><tbody>'+
+    pmts.map(function(p){
+      return '<tr'+(p.locked?'':' class="unlocked"')+'>'+
+        '<td style="white-space:nowrap">'+fmtDate(p.date)+'</td>'+
+        '<td>'+headLabel(p.for_yr)+(p.note?'<span class="p-note">'+esc(p.note)+'</span>':'')+'</td>'+
+        '<td style="font-weight:700;color:var(--gr)">'+inr(p.amount)+'</td>'+
+        '<td style="white-space:nowrap">'+lockCell('pay',s.id,p,isAdmin)+'</td>'+
+      '</tr>';
+    }).join('')+'</tbody></table></div>';
+    if(feesSet&&bal<=0)h+='<div class="pmt-foot">✅ Fully Paid</div>';
+  }
+  h+='</div>';
+
+  var sc=s.service_charge||0,scp=scPaid(s),scb=sc-scp,disb=byDate(s.sc_disb||[]);
+  h+='<div class="card"><div class="card-hd">'+
+    '<div class="card-title">Consultant Service Charge</div>'+
+    (isAdmin?'<button class="btn btn-s btn-sm" onclick="openConsultant(\''+s.id+'\')">✏️ Edit</button>':'')+'</div>';
+  if(s.consultant){
+    h+='<div class="card-body"><table class="fee-tbl" style="margin-bottom:12px">'+
+        '<tr><td class="fee-lbl">Consultant</td><td>'+esc(s.consultant)+'</td></tr>'+
+        '<tr><td class="fee-lbl">Service Charge</td><td>'+inr(sc)+'</td></tr>'+
+      '</table>'+
+      '<div class="bal-row" style="margin-bottom:0">'+
+        '<div class="bal-cell"><div class="bal-val s">'+inr(sc)+'</div><div class="bal-lbl">Charge</div></div>'+
+        '<div class="bal-cell"><div class="bal-val g s">'+inr(scp)+'</div><div class="bal-lbl">Disbursed</div></div>'+
+        '<div class="bal-cell"><div class="bal-val s'+(scb>0?' r':' g')+'">'+inr(scb)+'</div><div class="bal-lbl">Pending</div></div>'+
+      '</div></div>';
+    h+='<div class="sub-hd"><div class="sub-title">Disbursement History</div>'+
+      (scb>0?'<button class="btn btn-p btn-sm" onclick="openDisb(\''+s.id+'\')">+ Add Disbursement</button>':'')+'</div>';
+    if(!disb.length){
+      h+='<div class="card-body" style="color:var(--t3);font-size:13px;text-align:center">No disbursements yet</div>';
+    }else{
+      var run=sc;
+      h+='<div class="tbl-wrap"><table class="pmt-tbl"><thead><tr>'+
+        '<th>Date</th><th>Amount</th><th>Pending</th><th></th></tr></thead><tbody>'+
+        disb.map(function(d){
+          run-=d.amount;
+          return '<tr'+(d.locked?'':' class="unlocked"')+'>'+
+            '<td style="white-space:nowrap">'+fmtDate(d.date)+(d.note?'<span class="p-note">'+esc(d.note)+'</span>':'')+'</td>'+
+            '<td style="font-weight:700;color:var(--gr)">'+inr(d.amount)+'</td>'+
+            '<td style="font-weight:700;color:'+(run>0?'var(--re)':'var(--gr)')+'">'+inr(run)+'</td>'+
+            '<td style="white-space:nowrap">'+lockCell('disb',s.id,d,isAdmin)+'</td></tr>';
+        }).join('')+'</tbody></table></div>';
+      if(sc>0&&scb<=0)h+='<div class="pmt-foot">✅ Service charge fully disbursed</div>';
+    }
+  }else{
+    h+='<div class="card-body" style="color:var(--t3);font-size:13px">'+(isAdmin?'Tap Edit to add a consultant.':'No consultant assigned.')+'</div>';
+  }
+  h+='</div>';
+
+  el('content').innerHTML=h;
+}
+
+// ── FEE MODAL ──────────────────────────────────
+function openFees(sid){
+  if(CU.role!=='admin'){showToast('Only Dennis can set fees','err');return}
+  _feeSid=sid;var s=DB[sid],d=durationOf(s.course);
+  var def=feeStructFor(s)||{};
+  var f=s.fees||(Object.keys(def).length?def:{});
+  el('fees-modal-title').textContent=(s.fees&&s.fees.locked)?'Edit Fee Structure':'Set Fee Structure';
+  var rows=[['f-adm','Admission Fee',f.admission]];
+  for(var i=1;i<=4;i++){ if(i<=d||f['yr'+i]) rows.push(['f-yr'+i,ordinal(i)+' Year Fee',f['yr'+i]]); }
+  el('fees-body').innerHTML=rows.map(function(r){
+      return '<div class="f-mb"><div class="f-lbl">'+r[1]+'</div>'+
+        '<input class="f-inp" type="number" inputmode="numeric" id="'+r[0]+'" value="'+(r[2]||'')+'" placeholder="0 (leave blank if not applicable)"></div>';
+    }).join('');
+  openModal('m-fees');
+}
+function saveFees(){
+  var s=DB[_feeSid];
+  var admission=parseFloat(val('f-adm'))||0;
+  var yr1=parseFloat(val('f-yr1'))||0;
+  if(!admission&&!yr1){showToast('Enter at least one fee','err');return}
+  s.fees={admission:admission,yr1:yr1,yr2:parseFloat(val('f-yr2'))||0,yr3:parseFloat(val('f-yr3'))||0,
+    yr4:parseFloat(val('f-yr4'))||0,locked:true};
+  saveDB();closeModal('m-fees');showToast('Fees saved and locked 🔒');renderDetail();
+  if(API_TOKEN) apiPut('/api/fees/'+_feeSid,s.fees,null);
+}
+
+// ── PAYMENT MODAL (add + edit) ─────────────────
+function headRemaining(s,key,editP){
+  var h=feeHeads(s).find(function(x){return x.key===key});if(!h)return 0;
+  return h.fee-paidFor(s,key)+(editP&&editP.for_yr===key?editP.amount:0);
+}
+function openPayment(sid,pid){
+  _paySid=sid;_payEditId=pid||null;var s=DB[sid];
+  var editP=pid?(s.payments||[]).find(function(x){return x.id===pid}):null;
+  if(pid&&(!editP||editP.locked)){showToast('Payment is locked','err');return}
+  var heads=feeHeads(s);
+  var sel=editP?editP.for_yr:(heads.find(function(x){return headRemaining(s,x.key)>0})||{}).key;
+  el('pay-modal-title').textContent=editP?'Edit Payment':'Add Payment';
+  el('payment-body').innerHTML=
+    '<div class="f-mb"><div class="f-lbl">Paying towards</div>'+
+    '<select class="f-inp" id="p-yr" onchange="updatePayHint()">'+heads.map(function(x){
+      var rem=headRemaining(s,x.key,editP);
+      return '<option value="'+x.key+'"'+(x.key===sel?' selected':'')+(rem<=0?' disabled':'')+'>'+
+        headLabel(x.key)+(rem<=0?' (cleared)':' ('+inr(rem)+' due)')+'</option>';
+    }).join('')+'</select></div>'+
+    '<div id="p-hint" style="background:var(--am-lt);color:var(--am);padding:10px 12px;border-radius:8px;font-weight:700;font-size:13px;margin-bottom:12px"></div>'+
+    '<div class="f-row"><div><div class="f-lbl">Amount (₹)</div><input class="f-inp" type="number" inputmode="numeric" id="p-amt" placeholder="0" value="'+(editP?editP.amount:'')+'"></div>'+
+    '<div><div class="f-lbl">Date</div><input class="f-inp" type="date" id="p-date" value="'+(editP?editP.date:today())+'"></div></div>'+
+    '<div class="f-mb"><div class="f-lbl">Note (optional)</div><input class="f-inp" type="text" id="p-note" placeholder="e.g. Partial payment" value="'+esc(editP?editP.note:'')+'"></div>'+
+    '<div style="font-size:11px;color:var(--t3)">⚠️ Entry will be locked on save. Only Dennis can unlock to edit.</div>';
+  updatePayHint();
+  openModal('m-payment');
+}
+function updatePayHint(){
+  var s=DB[_paySid],key=val('p-yr');
+  var editP=_payEditId?s.payments.find(function(x){return x.id===_payEditId}):null;
+  var h=feeHeads(s).find(function(x){return x.key===key});
+  
+  var btn = el('btn-save-pmt');
+  var amtInp = el('p-amt');
+  var dateInp = el('p-date');
+  var noteInp = el('p-note');
+
+  el('p-hint').textContent=h?headLabel(key)+': '+inr(h.fee-headRemaining(s,key,editP))+' paid of '+inr(h.fee)+', '+inr(headRemaining(s,key,editP))+' due':'';
+  if(amtInp) amtInp.disabled = false;
+  if(dateInp) dateInp.disabled = false;
+  if(noteInp) noteInp.disabled = false;
+  if(btn) btn.style.display = 'inline-block';
+}
+function savePayment(){
+  var s=DB[_paySid];
+  var editP=_payEditId?s.payments.find(function(x){return x.id===_payEditId}):null;
+  var amt=parseFloat(val('p-amt'))||0,date=val('p-date'),key=val('p-yr');
+  
+  if(!key){showToast('Choose what this payment is for','err');return}
+  if(!amt||amt<=0){showToast('Enter a valid amount','err');return}
+  if(!date){showToast('Enter a date','err');return}
+  
+  var rem=headRemaining(s,key,editP);
+  if(amt>rem){showToast(headLabel(key)+' has only '+inr(rem)+' due','err');return}
+  
+  var sid=_paySid;
+  if(editP){
+    editP.amount=amt;editP.date=date;editP.for_yr=key;editP.note=val('p-note');
+    editP.locked=true;
+    saveDB();closeModal('m-payment');renderDetail();
+    if(!API_TOKEN){showToast('Payment saved and locked 🔒');return}
+    showToast('Saving…');
+    var ep='/api/payments/'+editP.id;
+    apiPut(ep,{amount:editP.amount,date:editP.date,for_yr:editP.for_yr,note:editP.note},function(){
+      apiPut(ep,{locked:true},function(){
+        verifyOnServer(sid,'pay',editP.id,{amount:editP.amount,for_yr:editP.for_yr,locked:true},'Payment saved and locked 🔒');
+      });
+    });
+  }else{
+    s.payments=s.payments||[];
+    var pid='P'+sid+'_'+Date.now();
+    var newP={id:pid,amount:amt,date:date,for_yr:key,note:val('p-note'),locked:true};
+    s.payments.push(newP);
+    saveDB();closeModal('m-payment');renderDetail();
+    if(!API_TOKEN){showToast('Payment saved and locked 🔒');return}
+    showToast('Saving…');
+    apiPost('/api/students/'+sid+'/payments',newP,function(d){
+      adoptServerId(sid,newP,d);
+      var check=function(){
+        verifyOnServer(sid,'pay',newP.id,{amount:newP.amount,for_yr:newP.for_yr},
+          'Payment saved'+(CU.role==='admin'?' and locked 🔒':''));
+      };
+      if(CU.role==='admin')apiPut('/api/payments/'+newP.id,{locked:true},check);else check();
+    });
+  }
+}
+function verifyOnServer(sid,kind,id,expect,okMsg){
+  apiGet('/api/students/'+encodeURIComponent(sid),function(st){
+    if(!st||!st.id){syncFailed('could not re-check with the server');return}
+    var it=((kind==='pay'?st.payments:st.sc_disb)||[]).find(function(x){return x.id===id});
+    var ok=expect===null?!it:(!!it&&Object.keys(expect).every(function(k){return it[k]===expect[k]}));
+    if(ok){showToast(okMsg);return}
+    syncFailed(expect===null?'the server still has this entry':
+      !it?'the server has no such entry':
+      'the server still shows '+inr(it.amount)+(it.locked?', locked':', unlocked'));
+  });
+}
+function adoptServerId(sid,item,d){
+  if(d&&d.id&&d.id!==item.id){
+    item.id=d.id;saveDB();
+    if(NAV.sid===sid)renderDetail();
+  }
+}
+
+// ── UNLOCK / DELETE ────────────────────────────
+function listFor(kind,sid){return kind==='pay'?DB[sid].payments:DB[sid].sc_disb}
+function unlockItem(kind,sid,id){
+  if(CU.role!=='admin'){showToast('Only Dennis can unlock','err');return}
+  if(!confirm('Unlock this entry for editing?'))return;
+  var it=(listFor(kind,sid)||[]).find(function(x){return x.id===id});
+  if(it){
+    it.locked=false;saveDB();renderDetail();
+    if(!API_TOKEN){showToast('Unlocked. Tap Edit to change it.');return}
+    showToast('Unlocking…');
+    var ep=kind==='pay'?'/api/payments/'+id:'/api/sc_disb/'+id;
+    apiPut(ep,{locked:false},function(){
+      verifyOnServer(sid,kind,id,{locked:false},'Unlocked. Tap Edit to change it.');
+    });
+  }
+}
+function deleteItem(kind,sid,id){
+  if(CU.role!=='admin'){showToast('Only Dennis can delete','err');return}
+  if(!confirm('Delete this entry permanently?'))return;
+  var arr=listFor(kind,sid)||[];
+  var i=arr.findIndex(function(x){return x.id===id});
+  if(i>-1){
+    arr.splice(i,1);saveDB();renderDetail();
+    if(!API_TOKEN){showToast('Entry deleted');return}
+    showToast('Deleting…');
+    var dp=kind==='pay'?'/api/payments/'+id:'/api/sc_disb/'+id;
+    apiDel(dp,function(){verifyOnServer(sid,kind,id,null,'Entry deleted')});
+  }
+}
+function deleteStudent(sid){
+  if(CU.role!=='admin'){showToast('Only Dennis can delete students','err');return}
+  var s=DB[sid];if(!s)return;
+  if(!confirm('Delete '+s.name+' permanently? This cannot be undone.'))return;
+  delete DB[sid];saveDB();showToast(s.name+' deleted');renderStudents();
+  if(API_TOKEN) apiDel('/api/students/'+sid,null);
+}
+
+// ── ADD STUDENT ─────────────────────────────────
+function openAddStudent(){
+  var key=curCourseKey(),y=yearOfStudy(NAV.batch);
+  el('add-student-body').innerHTML=
+    '<div style="background:var(--b4);color:var(--b1);padding:10px 12px;border-radius:8px;font-weight:700;font-size:13px;margin-bottom:12px">'+
+      esc(key==='bpt'?'BPT':key)+', '+batchLabel(NAV.batch)+' Batch</div>'+
+    '<div class="f-mb"><div class="f-lbl">Student Name</div><input class="f-inp" type="text" id="ns-name" placeholder="Full name"></div>'+
+    '<div class="f-mb"><div class="f-lbl">Mobile</div><input class="f-inp" type="tel" id="ns-mob" placeholder="10-digit number"></div>';
+  openModal('m-add-student');
+}
+function saveStudent(){
+  var name=val('ns-name');
+  if(!name){showToast('Enter student name','err');return}
+  var id='ADM'+Date.now().toString(36).toUpperCase().slice(-8);
+  var newS={id:id,name:name,mobile:val('ns-mob')||'0',college:NAV.college,cat:NAV.cat||'nursing',
+    course:curCourseKey(),batch:NAV.batch,consultant:'',service_charge:0,sc_disb:[],fees:null,payments:[]};
+  DB[id]=newS;
+  saveDB();closeModal('m-add-student');showToast('Student added ✓');
+  if(API_TOKEN){
+    apiPost('/api/students',newS,null);
+  }
+  goStudent(id);
+}
+
+// ── CONSULTANT ──────────────────────────────────
+function openConsultant(sid){
+  _conSid=sid;var s=DB[sid];
+  el('c-name').value=s.consultant||'';
+  el('c-charge').value=s.service_charge||'';
+  openModal('m-consult');
+}
+function saveConsultant(){
+  var s=DB[_conSid];var charge=parseFloat(val('c-charge'))||0;
+  if(charge&&charge<scPaid(s)){showToast('Already disbursed '+inr(scPaid(s))+', charge can\'t be lower','err');return}
+  s.consultant=val('c-name');s.service_charge=charge;
+  saveDB();closeModal('m-consult');showToast('Consultant saved');renderDetail();
+  if(API_TOKEN) apiPut('/api/students/'+_conSid,s,null);
+}
+
+// ── SC DISBURSEMENT (add + edit) ────────────────
+function openDisb(sid,did){
+  _disbSid=sid;_disbEditId=did||null;var s=DB[sid];
+  var d=did?(s.sc_disb||[]).find(function(x){return x.id===did}):null;
+  if(did&&(!d||d.locked)){showToast('Entry is locked','err');return}
+  var rem=(s.service_charge||0)-scPaid(s)+(d?d.amount:0);
+  el('disb-modal-title').textContent=d?'Edit Disbursement':'Add Disbursement';
+  el('disb-body').innerHTML=
+    '<div style="background:var(--am-lt);color:var(--am);padding:10px 12px;border-radius:8px;font-weight:700;font-size:13px;margin-bottom:12px">'+
+      esc(s.consultant)+': '+inr(rem)+' pending of '+inr(s.service_charge)+'</div>'+
+    '<div class="f-row"><div><div class="f-lbl">Amount (₹)</div><input class="f-inp" type="number" inputmode="numeric" id="d-amt" placeholder="0" value="'+(d?d.amount:'')+'"></div>'+
+    '<div><div class="f-lbl">Date</div><input class="f-inp" type="date" id="d-date" value="'+(d?d.date:today())+'"></div></div>'+
+    '<div class="f-mb"><div class="f-lbl">Note (optional)</div><input class="f-inp" type="text" id="d-note" placeholder="e.g. Paid by bank transfer" value="'+esc(d?d.note:'')+'"></div>'+
+    '<div style="font-size:11px;color:var(--t3)">⚠️ Entry will be locked on save. Only Dennis can unlock to edit.</div>';
+  openModal('m-disb');
+}
+function saveDisb(){
+  var s=DB[_disbSid];s.sc_disb=s.sc_disb||[];
+  var d=_disbEditId?s.sc_disb.find(function(x){return x.id===_disbEditId}):null;
+  var amt=parseFloat(val('d-amt'))||0,date=val('d-date');
+  if(!amt||amt<=0){showToast('Enter a valid amount','err');return}
+  if(!date){showToast('Enter a date','err');return}
+  var rem=(s.service_charge||0)-scPaid(s)+(d?d.amount:0);
+  if(amt>rem){showToast('Only '+inr(rem)+' pending','err');return}
+  var sid=_disbSid;
+  var okMsg='Disbursement saved and locked 🔒';
+  if(d){
+    d.amount=amt;d.date=date;d.note=val('d-note');d.locked=true;
+    saveDB();closeModal('m-disb');renderDetail();
+    if(!API_TOKEN){showToast(okMsg);return}
+    showToast('Saving…');
+    var ep='/api/sc_disb/'+d.id;
+    apiPut(ep,{amount:d.amount,date:d.date,note:d.note},function(){
+      apiPut(ep,{locked:true},function(){
+        verifyOnServer(sid,'disb',d.id,{amount:d.amount,locked:true},okMsg);
+      });
+    });
+  }else{
+    var did='D'+sid+'_'+Date.now();
+    var newD={id:did,amount:amt,date:date,note:val('d-note'),locked:true};
+    s.sc_disb.push(newD);
+    saveDB();closeModal('m-disb');renderDetail();
+    if(!API_TOKEN){showToast(okMsg);return}
+    showToast('Saving…');
+    apiPost('/api/students/'+sid+'/sc_disb',newD,function(r){
+      adoptServerId(sid,newD,r);
+      apiPut('/api/sc_disb/'+newD.id,{locked:true},function(){
+        verifyOnServer(sid,'disb',newD.id,{amount:newD.amount,locked:true},okMsg);
+      });
+    });
+  }
+}
+
+function amt(n){return (Math.round(n*100)/100).toLocaleString('en-IN')}
+
+// ── BATCH-WISE SUMMARY REPORT ──────────────────
+function openSummary(){
+  var col=getCollege(NAV.college),start=acadStart(),courses=[],html='';
+  if(col.cats){
+    col.cats.forEach(function(cat){
+      (cat.courses.length?cat.courses:['bpt']).forEach(function(c){courses.push({course:c,cat:cat.id})});
+    });
+  }else{
+    col.courses.forEach(function(c){courses.push({course:c,cat:null})});
+  }
+  
+  courses.forEach(function(cr){
+    var key=cr.course;
+    var stus=Object.values(DB).filter(function(s){return s.college===col.id&&s.course===key&&(!cr.cat||s.cat===cr.cat)});
+    if(!stus.length)return;
+    
+    var rows='<tr class="rpt-course"><td colspan="4">'+esc(key==='bpt'?'BPT':key)+'</td></tr>';
+    
+    var d = durationOf(key);
+    for(var y=1; y<=d; y++){
+      var b = start - y + 1;
+      var list = stus.filter(function(s){return s.batch===b});
+      
+      if(!list.length) continue;
+      
+      // Batch Header
+      rows+='<tr class="rpt-head" style="background:#E3F2FD"><td colspan="4" style="color:#0D47A1;font-size:13px">'+batchLabel(b)+' Batch ('+list.length+' students)</td></tr>';
+      rows+='<tr class="rpt-head"><td style="background:#F0F7FF">Fee Head</td><td style="background:#F0F7FF">Billed</td><td style="background:#F0F7FF">Collected</td><td style="background:#F0F7FF">Pending</td></tr>';
+      
+      var b_billed = 0, b_coll = 0, b_pend = 0;
+      
+      // Define fee heads: Admission Fee, Year 1 Fee, Year 2 Fee...
+      var heads = [{key:'Admission', label:'Admission Fee', reqYr: 1, feeProp: 'admission'}];
+      for(var i=1; i<=d; i++){
+        heads.push({key:'Year '+i, label:ordinal(i)+' Year Fees', reqYr: i, feeProp: 'yr'+i});
+      }
+      
+      heads.forEach(function(hd){
+        var expected = 0, collected = 0;
+        
+        list.forEach(function(s){
+          if(!(s.fees && s.fees.locked)) return;
+          
+          // Only bill if the batch's current study year has reached this fee head
+          if(y >= hd.reqYr){
+            expected += (s.fees[hd.feeProp] || 0);
+          }
+          
+          (s.payments || []).forEach(function(p){
+            if(p.for_yr === hd.key) collected += (p.amount || 0);
+          });
+        });
+        
+        var pending = expected - collected;
+        b_billed += expected; b_coll += collected; b_pend += pending;
+        
+        rows+='<tr><td>'+esc(hd.label)+'</td><td>'+amt(expected)+'</td><td>'+amt(collected)+'</td><td>'+amt(pending)+'</td></tr>';
+      });
+      
+      rows+='<tr style="font-weight:800;background:#F8FAFC"><td>Batch Total</td><td>'+amt(b_billed)+'</td><td style="color:var(--gr)">'+amt(b_coll)+'</td><td style="color:'+(b_pend>0?'var(--re)':'var(--t1)')+'">'+amt(b_pend)+'</td></tr>';
+    }
+    html+='<div class="rpt-col" style="margin-bottom:16px"><table class="rpt-tbl">'+rows+'</table></div>';
+  });
+  
+  el('rpt-body').innerHTML='<div class="rpt-wrap"><div class="rpt-college">'+col.icon+' '+esc(col.name)+'</div>'+
+    (html||'<div class="empty"><p>No students yet</p></div>')+'</div>';
+  openModal('m-report');
+}
+</script>
+
+</body>
+</html>
